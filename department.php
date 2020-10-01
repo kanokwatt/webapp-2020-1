@@ -10,27 +10,15 @@
 //---------------------------------------------------------------------- 
 // 1. CONNECT
 //---------------------------------------------------------------------- 
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "company";
-    
-    // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    require "connectDB.php";
 
-    // Check connection
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
 //---------------------------------------------------------------------- 
 // 2. SELECT (SQL)
 //----------------------------------------------------------------------     
     $sql = "SELECT DEPT_ID, DEPT_NAME FROM department";
     $sql = $sql . " WHERE DEPT_ID LIKE '%$find%' OR DEPT_NAME LIKE '%$find%'";
 
-    echo $sql;
-
-
+    //echo $sql;
 ?>
 <html>
     <head><title>Department</title></head>
@@ -51,11 +39,19 @@
         echo "</form>";            
         while($row = mysqli_fetch_assoc($result)) {
             echo "<tr>";
-                echo "<td>".$row['DEPT_ID']."</td>";
-                echo "<td>".$row['DEPT_NAME']."</td>";
+
+                echo "<form action='update_department.php'>";
+                    //echo "<td><input type='text' name='txt_DEPT_ID' value='".$row['DEPT_ID']."' size='3' readonly></td>";
+                    echo "<td>" . $row['DEPT_ID']."</td>";
+                    echo "<td><input type='text' name='txt_DEPT_NAME' value='".$row['DEPT_NAME']."' size='20'></td>";               
+                    echo "<td><button>Update</button></td>"; 
+                    echo "<input type='hidden' name='id' value='" . $row['DEPT_ID'] ."'>";
+                echo "</form>";
+                
+                
                 echo "<form action='delete_department.php'>";
-                echo "<td><button>Delete</button></td>"; 
-                echo "<input type='hidden' name='id' value='" . $row['DEPT_ID'] ."'>";
+                    echo "<td><button>Delete</button></td>"; 
+                    echo "<input type='hidden' name='id' value='" . $row['DEPT_ID'] ."'>";
                 echo "</form>";
             echo "</tr>";
         }
@@ -67,6 +63,19 @@
     
     mysqli_close($conn);   
 ?>                                       
-      
+    <hr/>
+    <form action="add_department.php">
+        <table>
+            <tr>
+                <td>DEPARTMENT ID:</td>
+                <td><input type="text" name="txt_DEPT_ID" size="5"></td>
+            </tr>
+            <tr>
+                <td>DEPARTMENT NAME:</td>
+                <td><input type="text" name="txt_DEPT_NAME"></td>
+            </tr>        
+        </table>
+        <button type="submit" class="btn">Add</button>            
+    </form>
     </body>
 </html>
