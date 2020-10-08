@@ -47,7 +47,30 @@
                 echo "<form action='update_user.php'>";
                     echo "<td>" . $row['USER_ID']."</td>";
                     echo "<td><input type='text' name='txt_USER_NAME' value='".$row['USER_NAME']."' size='20'></td>";   
-                    echo "<td><input type='text' name='txt_DEPT_ID' value='".$row['DEPT_ID']."' size='20'></td>";             
+                    
+                    // SELECT (SQL)
+                    $sql = "SELECT DEPT_ID, DEPT_NAME FROM department";
+
+                    // EXECUTE 
+                    $result1 = mysqli_query($conn, $sql);
+
+                    echo "<td><select name='txt_DEPT_ID'>";
+                    if (mysqli_num_rows($result1) > 0) {
+                        while($row1 = mysqli_fetch_assoc($result1)) {
+
+                            if($row['DEPT_ID'] == $row1['DEPT_ID']){ // Match DEPT_ID
+                                echo "<option value='". $row1['DEPT_ID']. "' selected>". $row1['DEPT_NAME']. "</option>";
+                            }
+                            else {
+                                echo "<option value='". $row1['DEPT_ID']. "'>". $row1['DEPT_NAME']. "</option>";
+                            }
+                            
+                        }
+                    }
+                    echo "</select></td>";                    
+                    //echo "<td><input type='text' name='txt_DEPT_ID' value='".$row['DEPT_ID']."' size='20'></td>";  
+                    
+                    
                     echo "<td><button>Update</button></td>"; 
                     echo "<input type='hidden' name='id' value='" . $row['USER_ID'] ."'>";
                 echo "</form>";
@@ -65,18 +88,40 @@
         echo "0 results";
     }
     
-    mysqli_close($conn);   
+    //mysqli_close($conn);   
+
 ?>                                       
     <hr/>
     <form action="add_user.php">
         <table>
             <tr>
-                <td>USER_NAME:</td>
+                <td>USER NAME:</td>
                 <td><input type="text" name="txt_USER_NAME"></td>
             </tr>   
             <tr>
-                <td>DEPT_ID:</td>
-                <td><input type="text" name="txt_DEPT_ID"></td>
+                <td>DEPARTMENT NAME:</td>
+                <td>
+<?php    
+
+//---------------------------------------------------------------------- 
+// 2. SELECT (SQL)
+//---------------------------------------------------------------------- 
+$sql = "SELECT DEPT_ID, DEPT_NAME FROM department";            
+
+//---------------------------------------------------------------------- 
+// 3. EXECUTE
+//----------------------------------------------------------------------     
+    $result = mysqli_query($conn, $sql);
+
+    echo "<select name='txt_DEPT_ID'>";
+    if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            echo "<option value='". $row['DEPT_ID']. "'>". $row['DEPT_NAME']. "</option>";
+        }
+    }
+    echo "</select>";
+?>
+                </td>
             </tr>                 
         </table>
         <button type="submit" class="btn">Add</button>            
