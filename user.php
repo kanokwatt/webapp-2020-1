@@ -1,6 +1,14 @@
 <?php
 // user.php
-    // Initial
+
+// Check Authentication
+session_start();
+
+if(!isset($_SESSION['user']))  // Unauthorized
+  // redirect to login.php
+  header("Location: login.php");  
+
+// Initial
     $find = "";
 
     if (isset($_REQUEST['txtSearch'])) $find = $_REQUEST['txtSearch'];
@@ -15,10 +23,7 @@
 //---------------------------------------------------------------------- 
 // 2. SELECT (SQL)
 //----------------------------------------------------------------------     
-    //$sql = "SELECT DEPT_ID, USER_NAME FROM department";
-    //$sql = $sql . " WHERE DEPT_ID LIKE '%$find%' OR USER_NAME LIKE '%$find%'";
-
-    $sql = "SELECT USER_ID, USER_NAME, DEPT_ID FROM user";
+    $sql = "SELECT USER_ID, USER_NAME, PASSWORD, DEPT_ID FROM user";
     $sql = $sql . " WHERE USER_ID LIKE '%$find%' OR USER_NAME LIKE '%$find%' OR DEPT_ID LIKE '%$find%'";
 
     //echo $sql;
@@ -48,29 +53,27 @@
                     echo "<td>" . $row['USER_ID']."</td>";
                     echo "<td><input type='text' name='txt_USER_NAME' value='".$row['USER_NAME']."' size='20'></td>";   
                     
-                    // SELECT (SQL)
+                    // 2. SELECT (SQL)
                     $sql = "SELECT DEPT_ID, DEPT_NAME FROM department";
 
-                    // EXECUTE 
+                    // 3. EXECUTE 
                     $result1 = mysqli_query($conn, $sql);
 
                     echo "<td><select name='txt_DEPT_ID'>";
                     if (mysqli_num_rows($result1) > 0) {
                         while($row1 = mysqli_fetch_assoc($result1)) {
 
-                            if($row['DEPT_ID'] == $row1['DEPT_ID']){ // Match DEPT_ID
-                                echo "<option value='". $row1['DEPT_ID']. "' selected>". $row1['DEPT_NAME']. "</option>";
-                            }
-                            else {
-                                echo "<option value='". $row1['DEPT_ID']. "'>". $row1['DEPT_NAME']. "</option>";
-                            }
+                            $selected = '';
+
+                            if($row['DEPT_ID'] == $row1['DEPT_ID']) $selected = 'selected';
+                            echo "<option value='". $row1['DEPT_ID']. "' $selected>". $row1['DEPT_NAME']. "</option>";
                             
                         }
                     }
-                    echo "</select></td>";                    
-                    //echo "<td><input type='text' name='txt_DEPT_ID' value='".$row['DEPT_ID']."' size='20'></td>";  
-                    
-                    
+                    echo "</select></td>";     
+
+                    echo "<td><input type='text' name='txt_PASSWORD' value='".$row['PASSWORD']."' size='40'></td>";  
+                                        
                     echo "<td><button>Update</button></td>"; 
                     echo "<input type='hidden' name='id' value='" . $row['USER_ID'] ."'>";
                 echo "</form>";
@@ -98,6 +101,10 @@
                 <td>USER NAME:</td>
                 <td><input type="text" name="txt_USER_NAME"></td>
             </tr>   
+            <tr>
+                <td>PASSWORD:</td>
+                <td><input type="text" name="txt_PASSWORD"></td>
+            </tr>             
             <tr>
                 <td>DEPARTMENT NAME:</td>
                 <td>

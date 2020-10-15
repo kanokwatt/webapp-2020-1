@@ -3,7 +3,8 @@
 
 // 1. Initial       
         
-$user_name  = $_REQUEST["txt_USER_NAME"];       
+$user_name  = $_REQUEST["txt_USER_NAME"];   
+$pwd   = $_REQUEST["txt_PASSWORD"];       
 $id         = $_REQUEST["id"];                  
 $dept_id    = $_REQUEST["txt_DEPT_ID"];                  
 
@@ -11,7 +12,7 @@ $dept_id    = $_REQUEST["txt_DEPT_ID"];
 require "connectDB.php";
 
 // 3. SELECT (SQL)
-$sql = "UPDATE user SET USER_NAME='$user_name', DEPT_ID='$dept_id' WHERE USER_ID = '$id'";
+$sql = "UPDATE user SET USER_NAME='$user_name', PASSWORD='$pwd', DEPT_ID='$dept_id' WHERE USER_ID = '$id'";
 
 //echo $sql;
 

@@ -1,5 +1,13 @@
 <?php
 // department.php
+
+// Check Authentication
+session_start();
+
+if(!isset($_SESSION['user']))  // Unauthorized
+  // redirect to login.php
+  header("Location: login.php"); 
+
     // Initial
     $find = "";
 

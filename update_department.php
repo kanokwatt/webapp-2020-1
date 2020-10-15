@@ -20,5 +20,5 @@ if (mysqli_query($conn, $sql)) {
 }
 
 // 5. Redirect
-//header("Location: department.php");
+header("Location: department.php");
 ?>

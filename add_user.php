@@ -3,9 +3,13 @@
 
 // 1. Initial
 $user_name  = $_REQUEST["txt_USER_NAME"];
+$pwd        = $_REQUEST["txt_PASSWORD"];    
 $dept_id    = $_REQUEST["txt_DEPT_ID"];
 
-//echo $dept_id . ", ". $dept_name;
+echo "Password Before MD5: " . $pwd;
+echo "Password After MD5: " . md5($pwd);
+
+$pwd = md5($pwd);
 
 //---------------------------------------------------------------------- 
 // 2. CONNECT
@@ -18,10 +22,10 @@ require "connectDB.php";
 //$sql = "INSERT INTO department (DEPT_ID, DEPT_NAME)";
 //$sql = $sql . " VALUES ('$dept_id', '$dept_name')";
 
-$sql = "INSERT INTO user (USER_NAME, DEPT_ID)";
-$sql = $sql . " VALUES ('$user_name', '$dept_id')";
+$sql = "INSERT INTO user (USER_NAME, PASSWORD, DEPT_ID)";
+$sql = $sql . " VALUES ('$user_name', '$pwd', '$dept_id')";
 
-echo $sql;
+//echo $sql;
 
 //---------------------------------------------------------------------- 
 // 4. EXECUTE
